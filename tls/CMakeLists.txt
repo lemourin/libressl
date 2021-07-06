@@ -38,16 +38,7 @@ if(LIBTLS_EXTRA_EXPORT)
 	endforeach()
 endif()
 
-add_library(tls_obj OBJECT ${TLS_SRC})
-target_include_directories(tls_obj
-	PRIVATE
-		.
-		../include/compat
-	PUBLIC
-		../include)
-
-add_library(tls $<TARGET_OBJECTS:tls_obj> $<TARGET_OBJECTS:ssl_obj>
-	$<TARGET_OBJECTS:crypto_obj>)
+add_library(tls ${TLS_SRC})
 target_include_directories(tls
 	PRIVATE
 		.
@@ -56,7 +47,7 @@ target_include_directories(tls
 		../include)
 
 export_symbol(tls ${CMAKE_CURRENT_BINARY_DIR}/tls.sym)
-target_link_libraries(tls ${PLATFORM_LIBS})
+target_link_libraries(tls ${PLATFORM_LIBS} ssl crypto)
 if (WIN32)
 	set(TLS_POSTFIX -${TLS_MAJOR_VERSION})
 endif()
